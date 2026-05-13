@@ -1,4 +1,4 @@
-package main.java.com.tup.programacion3.entities;
+package com.tup.programacion3.entities;
 
 import lombok.*;
 

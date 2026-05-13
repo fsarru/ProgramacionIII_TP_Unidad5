@@ -1,7 +1,7 @@
-package main.java.com.tup.programacion3.entities;
+package com.tup.programacion3.entities;
 
 import com.tup.programacion3.enums.Estado;
-import com.tup.programacion3.enums.FormaPago;
+import main.java.com.tup.programacion3.enums.FormaPago;
 import lombok.*;
 
 import java.time.LocalDate;

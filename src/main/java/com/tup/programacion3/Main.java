@@ -1,9 +1,10 @@
-package main.java.com.tup.programacion3;
+package com.tup.programacion3;
 
-import main.java.com.tup.programacion3.entities.Categoria;
-import main.java.com.tup.programacion3.entities.Pedido;
-import main.java.com.tup.programacion3.entities.Producto;
-import main.java.com.tup.programacion3.entities.Usuario;
+import com.tup.programacion3.dtos.UsuarioDTO;
+import com.tup.programacion3.entities.Categoria;
+import com.tup.programacion3.entities.Pedido;
+import com.tup.programacion3.entities.Producto;
+import com.tup.programacion3.entities.Usuario;
 import main.java.com.tup.programacion3.enums.FormaPago;
 import main.java.com.tup.programacion3.enums.Rol;
 
@@ -105,3 +106,4 @@ public class Main {
         System.out.println(dto);
         // Verás que en el print del DTO NO aparece ni el Rol ni la Contraseña.
     }
+}

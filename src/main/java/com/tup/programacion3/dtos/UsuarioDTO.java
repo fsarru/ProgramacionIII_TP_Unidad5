@@ -1,6 +1,6 @@
-package main.java.com.tup.programacion3.dtos;
+package com.tup.programacion3.dtos;
 
-import main.java.com.tup.programacion3.entities.Pedido;
+import com.tup.programacion3.entities.Pedido;
 import java.util.Set;
 
 public record UsuarioDTO(
