@@ -1,36 +1,18 @@
 package main.java.com.tup.programacion3.entities;
 
-import java.util.Objects;
+import lombok.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class DetallePedido {
     private int cantidad;
     private Double subtotal;
+
+    @EqualsAndHashCode.Include
     private Producto producto;
-
-    public DetallePedido(int cantidad, Producto producto) {
-        this.cantidad = cantidad;
-        this.producto = producto;
-        this.subtotal = cantidad * producto.getPrecio();
-    }
-
-    public Double getSubtotal() { return subtotal; }
-    public Producto getProducto() { return producto; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DetallePedido)) return false;
-        DetallePedido that = (DetallePedido) o;
-        return Objects.equals(producto, that.producto);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(producto);
-    }
-
-    @Override
-    public String toString() {
-        return "DetallePedido{cantidad=" + cantidad + ", subtotal=$" + subtotal + ", producto=" + producto.getNombre() + "}";
-    }
 }

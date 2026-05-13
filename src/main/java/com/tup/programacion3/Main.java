@@ -12,90 +12,96 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        // --- 3.a Instanciar 2 Usuarios ---
-        Usuario usuario1 = new Usuario(1L, "Franco", "Sarrú", "franco.dev@mail.com", "3411234567", Rol.ADMIN);
-        Usuario usuario2 = new Usuario(2L, "Walter", "Sarrú", "walter.s@mail.com", "3419876543", Rol.USUARIO);
+        // --- 3.a Instanciar 2 Usuarios usando Builder ---
+        Usuario usuario1 = Usuario.builder()
+                .id(1L)
+                .nombre("Franco")
+                .apellido("Sarrú")
+                .mail("franco.dev@mail.com")
+                .celular("3411234567")
+                .contraseña("secreta123")
+                .rol(Rol.ADMIN)
+                .build();
 
-        // --- 3.c Instanciar 3 Categorías ---
-        Categoria catHardware = new Categoria(1L, "Hardware PC", "Componentes y armado para desarrollo");
-        Categoria catAsado = new Categoria(2L, "Carnicería", "Cortes tradicionales y embutidos");
-        Categoria catIndumentaria = new Categoria(3L, "Deportes y Trekking", "Ropa");
+        Usuario usuario2 = Usuario.builder()
+                .id(2L)
+                .nombre("Walter")
+                .apellido("Sarrú")
+                .mail("walter.s@mail.com")
+                .celular("3419876543")
+                .contraseña("pass456")
+                .rol(Rol.USUARIO)
+                .build();
 
-        // --- 3.d Instanciar 10 Productos ---
+        // --- 3.c Instanciar 3 Categorías usando Builder ---
+        Categoria catHardware = Categoria.builder().id(1L).nombre("Hardware PC").descripcion("Componentes").build();
+        Categoria catAsado = Categoria.builder().id(2L).nombre("Carnicería").descripcion("Cortes").build();
+        Categoria catIndumentaria = Categoria.builder().id(3L).nombre("Deportes").descripcion("Ropa").build();
+
+        // --- 3.d Instanciar 10 Productos usando Builder ---
         Set<Producto> inventario = new HashSet<>();
 
-        Producto p1 = new Producto(1L, "Procesador AMD Ryzen", 250000.0, "Procesador AM5", 10, "cpu.jpg", true);
-        Producto p2 = new Producto(2L, "Motherboard", 180000.0, "Placa base ASUS", 15, "mobo.jpg", true);
-        Producto p3 = new Producto(3L, "Costillar de Cerdo", 15000.0, "Corte entero para asado", 5, "costillar.jpg", true);
-        Producto p4 = new Producto(4L, "Chorizo", 6000.0, "Embutido fresco", 20, "chorizo.jpg", true);
-        Producto p5 = new Producto(5L, "Yerba Mate", 3500.0, "Paquete 1kg", 50, "yerba.jpg", true);
-        Producto p6 = new Producto(6L, "Termo Acero", 45000.0, "Mantiene agua caliente", 8, "termo.jpg", true);
-        Producto p7 = new Producto(7L, "Remera", 80000.0, "Oficial titular", 12, "river.jpg", true);
-        Producto p8 = new Producto(8L, "Zapatillas", 120000.0, "Suela reforzada montaña", 7, "zapas.jpg", true);
-        Producto p9 = new Producto(9L, "Pantalón", 75000.0, "Denim clásico", 10, "jean.jpg", true);
-        Producto p10 = new Producto(10L, "Carbón", 2000.0, "Bolsa 4kg", 30, "carbon.jpg", true);
+        Producto p1 = Producto.builder().id(1L).nombre("Procesador AMD Ryzen").precio(250000.0).stock(10).disponible(true).build();
+        Producto p2 = Producto.builder().id(2L).nombre("Motherboard").precio(180000.0).stock(15).disponible(true).build();
+        Producto p3 = Producto.builder().id(3L).nombre("Costillar de Cerdo").precio(15000.0).stock(5).disponible(true).build();
+        Producto p4 = Producto.builder().id(4L).nombre("Chorizo").precio(6000.0).stock(20).disponible(true).build();
+        Producto p5 = Producto.builder().id(5L).nombre("Yerba Mate").precio(3500.0).stock(50).disponible(true).build();
+        Producto p6 = Producto.builder().id(6L).nombre("Termo Acero").precio(45000.0).stock(8).disponible(true).build();
+        Producto p7 = Producto.builder().id(7L).nombre("Remera").precio(80000.0).stock(12).disponible(true).build();
+        Producto p8 = Producto.builder().id(8L).nombre("Zapatillas").precio(120000.0).stock(7).disponible(true).build();
+        Producto p9 = Producto.builder().id(9L).nombre("Pantalón").precio(75000.0).stock(10).disponible(true).build();
+        Producto p10 = Producto.builder().id(10L).nombre("Carbón").precio(2000.0).stock(30).disponible(true).build();
 
         inventario.addAll(Set.of(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10));
 
-        // Asignar productos a categorías
-        catHardware.addProducto(p1); catHardware.addProducto(p2);
-        catAsado.addProducto(p3); catAsado.addProducto(p4); catAsado.addProducto(p10);
-        catIndumentaria.addProducto(p7); catIndumentaria.addProducto(p8); catIndumentaria.addProducto(p9);
-
-        // --- 3.b Instanciar 3 Pedidos (al menos 2 detalles por cada uno) ---
-        Pedido pedido1 = new Pedido(1L, FormaPago.TRANSFERENCIA);
+        // --- 3.b Instanciar 3 Pedidos usando Builder ---
+        Pedido pedido1 = Pedido.builder().id(1L).formaPago(FormaPago.TRANSFERENCIA).build();
         pedido1.addDetallePedido(1, p1);
         pedido1.addDetallePedido(1, p2);
         usuario1.addPedido(pedido1);
 
-        Pedido pedido2 = new Pedido(2L, FormaPago.TARJETA);
+        Pedido pedido2 = Pedido.builder().id(2L).formaPago(FormaPago.TARJETA).build();
         pedido2.addDetallePedido(1, p7);
         pedido2.addDetallePedido(1, p9);
         usuario1.addPedido(pedido2);
 
-        Pedido pedido3 = new Pedido(3L, FormaPago.EFECTIVO);
+        Pedido pedido3 = Pedido.builder().id(3L).formaPago(FormaPago.EFECTIVO).build();
         pedido3.addDetallePedido(2, p3);
         pedido3.addDetallePedido(5, p4);
-        pedido3.addDetallePedido(3, p10);
         usuario2.addPedido(pedido3);
 
-        //  RESULTADOS POR CONSOLA (Punto 4)
-        System.out.println("--- MOSTRANDO UN PRODUCTO ---");
-        System.out.println(p1.toString());
+        // --- RESULTADOS POR CONSOLA (Punto 4) ---
+        System.out.println("--- MOSTRANDO UN PRODUCTO (Generado por Lombok) ---");
+        System.out.println(p1);
 
         System.out.println("\n--- LISTADO DE PRODUCTOS CARGADOS ---");
-        inventario.forEach(prod -> System.out.println(prod.toString()));
+        inventario.forEach(System.out::println);
 
         System.out.println("\n--- PEDIDOS DEL USUARIO CON MÁS PEDIDOS ---");
         Usuario maxUser = (usuario1.getPedidos().size() > usuario2.getPedidos().size()) ? usuario1 : usuario2;
         System.out.println("El usuario con más pedidos es: " + maxUser.getNombre());
-        for (Pedido ped : maxUser.getPedidos()) {
-            System.out.println(ped.toString());
-        }
+        maxUser.getPedidos().forEach(System.out::println);
 
-        //  COMPARACIÓN (Punto 5)
-        System.out.println("\n--- COMPARACIÓN DE PRODUCTO NUEVO (EQUALS Y UNICIDAD EN SET) ---");
+        // --- COMPARACIÓN (Punto 5) ---
+        System.out.println("\n--- COMPARACIÓN DE PRODUCTO NUEVO (EQUALS) ---");
+        Producto productoDuplicado = Producto.builder().id(99L).nombre("Procesador AMD Ryzen").precio(280000.0).stock(2).disponible(true).build();
 
-        // CORRECCIÓN: El producto debe tener el MISMO ID y MISMO NOMBRE que p1 para ser "igual" según el método equals.
-        Producto productoDuplicado = new Producto(1L, "Procesador AMD Ryzen", 280000.0, "Procesador Actualizado", 2, "cpu2.jpg", true);
-
-        boolean encontrado = false;
-        for (Producto prod : inventario) {
+        inventario.forEach(prod -> {
             if (prod.equals(productoDuplicado)) {
-                System.out.println("¡Coincidencia encontrada lógicamente (equals)! -> " + prod.toString());
-                encontrado = true;
-                break;
+                System.out.println("¡Coincidencia encontrada lógicamente (equals)! -> " + prod.getNombre());
             }
-        }
-        if (!encontrado) {
-            System.out.println("No se encontraron coincidencias.");
-        }
+        });
 
-        // Demostrar cómo se comporta la colección (HashSet) con este duplicado lógico
-        System.out.println("\nTamaño del inventario ANTES de intentar agregar el duplicado: " + inventario.size());
-        boolean fueAgregado = inventario.add(productoDuplicado);
-
-        System.out.println("¿Se agregó el duplicado al Set?: " + fueAgregado); // Debería dar false
-        System.out.println("Tamaño del inventario DESPUÉS de intentar agregar: " + inventario.size());
+        // --- PRUEBA DEL DTO (Punto 6) ---
+        System.out.println("\n--- PRUEBA DEL RECORD DTO (Ocultando datos sensibles) ---");
+        UsuarioDTO dto = new UsuarioDTO(
+                usuario1.getId(),
+                usuario1.getNombre(),
+                usuario1.getApellido(),
+                usuario1.getMail(),
+                usuario1.getCelular(),
+                usuario1.getPedidos()
+        );
+        System.out.println(dto);
+        // Verás que en el print del DTO NO aparece ni el Rol ni la Contraseña.
     }
-}

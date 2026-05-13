@@ -1,43 +1,47 @@
 package main.java.com.tup.programacion3.entities;
 
 import com.tup.programacion3.enums.Estado;
-import main.java.com.tup.programacion3.enums.FormaPago;
+import com.tup.programacion3.enums.FormaPago;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = "detalles")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Pedido {
+    @EqualsAndHashCode.Include
     private Long id;
-    private LocalDate fecha;
-    private Estado estado;
-    private Double total;
+
+    @Builder.Default
+    private LocalDate fecha = LocalDate.now();
+
+    @Builder.Default
+    private Estado estado = Estado.PENDIENTE;
+
+    @Builder.Default
+    private Double total = 0.0;
+
     private FormaPago formaPago;
-    private Set<DetallePedido> detalles;
 
-    public Pedido(Long id, FormaPago formaPago) {
-        this.id = id;
-        this.fecha = LocalDate.now();
-        this.estado = Estado.PENDIENTE;
-        this.formaPago = formaPago;
-        this.detalles = new HashSet<>();
-        this.total = 0.0;
-    }
+    @Builder.Default
+    private Set<DetallePedido> detalles = new HashSet<>();
 
+    // Mantenemos la lógica de negocio que no puede automatizar Lombok
     public void addDetallePedido(int cantidad, Producto producto) {
-        DetallePedido detalle = new DetallePedido(cantidad, producto);
+        DetallePedido detalle = DetallePedido.builder()
+                .cantidad(cantidad)
+                .producto(producto)
+                .subtotal(cantidad * producto.getPrecio())
+                .build();
         detalles.add(detalle);
         calcularTotal();
-    }
-
-    public DetallePedido findeDetallePedidoByProducto(Producto producto) {
-        for (DetallePedido dp : detalles) {
-            if (dp.getProducto().equals(producto)) {
-                return dp;
-            }
-        }
-        return null;
     }
 
     public void deleteDetallePedidoByProducto(Producto producto) {
@@ -45,26 +49,7 @@ public class Pedido {
         calcularTotal();
     }
 
-    // Ya no implementa la interfaz Calculable, pero conserva su comportamiento
     public void calcularTotal() {
         this.total = detalles.stream().mapToDouble(DetallePedido::getSubtotal).sum();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Pedido)) return false;
-        Pedido pedido = (Pedido) o;
-        return Objects.equals(id, pedido.id) && Objects.equals(fecha, pedido.fecha);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, fecha);
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido{id=" + id + ", fecha=" + fecha + ", estado=" + estado + ", total=$" + total + ", detalles=" + detalles.size() + "}";
     }
 }
