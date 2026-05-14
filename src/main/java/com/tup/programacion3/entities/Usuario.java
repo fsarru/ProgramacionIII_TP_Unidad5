@@ -1,9 +1,8 @@
 package com.tup.programacion3.entities;
 
-import main.java.com.tup.programacion3.enums.Rol;
-
+import com.tup.programacion3.enums.Rol;
 import lombok.*;
-
+import lombok.experimental.SuperBuilder;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,17 +10,14 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString(exclude = {"contraseña", "pedidos"}) // Protegemos la contraseña en los logs
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Usuario {
-    private Long id;
+@SuperBuilder
+@ToString(callSuper = true, exclude = {"contraseña", "pedidos"})
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+public class Usuario extends Base {
     private String nombre;
     private String apellido;
-
     @EqualsAndHashCode.Include
     private String mail;
-
     private String celular;
     private String contraseña;
     private Rol rol;

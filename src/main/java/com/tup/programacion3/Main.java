@@ -5,8 +5,8 @@ import com.tup.programacion3.entities.Categoria;
 import com.tup.programacion3.entities.Pedido;
 import com.tup.programacion3.entities.Producto;
 import com.tup.programacion3.entities.Usuario;
-import main.java.com.tup.programacion3.enums.FormaPago;
-import main.java.com.tup.programacion3.enums.Rol;
+import com.tup.programacion3.enums.FormaPago;
+import com.tup.programacion3.enums.Rol;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -71,29 +71,9 @@ public class Main {
         pedido3.addDetallePedido(5, p4);
         usuario2.addPedido(pedido3);
 
-        // --- RESULTADOS POR CONSOLA (Punto 4) ---
         System.out.println("--- MOSTRANDO UN PRODUCTO (Generado por Lombok) ---");
         System.out.println(p1);
 
-        System.out.println("\n--- LISTADO DE PRODUCTOS CARGADOS ---");
-        inventario.forEach(System.out::println);
-
-        System.out.println("\n--- PEDIDOS DEL USUARIO CON MÁS PEDIDOS ---");
-        Usuario maxUser = (usuario1.getPedidos().size() > usuario2.getPedidos().size()) ? usuario1 : usuario2;
-        System.out.println("El usuario con más pedidos es: " + maxUser.getNombre());
-        maxUser.getPedidos().forEach(System.out::println);
-
-        // --- COMPARACIÓN (Punto 5) ---
-        System.out.println("\n--- COMPARACIÓN DE PRODUCTO NUEVO (EQUALS) ---");
-        Producto productoDuplicado = Producto.builder().id(99L).nombre("Procesador AMD Ryzen").precio(280000.0).stock(2).disponible(true).build();
-
-        inventario.forEach(prod -> {
-            if (prod.equals(productoDuplicado)) {
-                System.out.println("¡Coincidencia encontrada lógicamente (equals)! -> " + prod.getNombre());
-            }
-        });
-
-        // --- PRUEBA DEL DTO (Punto 6) ---
         System.out.println("\n--- PRUEBA DEL RECORD DTO (Ocultando datos sensibles) ---");
         UsuarioDTO dto = new UsuarioDTO(
                 usuario1.getId(),
@@ -104,6 +84,36 @@ public class Main {
                 usuario1.getPedidos()
         );
         System.out.println(dto);
-        // Verás que en el print del DTO NO aparece ni el Rol ni la Contraseña.
+
+
+        System.out.println("\n========= RESOLUCIÓN TP PROGRAMACIÓN FUNCIONAL =========");
+
+        System.out.println("\n--- 1. Cálculo de total usando Streams en Pedido ---");
+        System.out.println("El total calculado con Streams para el Pedido 3 es: $" + pedido3.getTotal());
+
+        // 2. Mostrar por consola productos disponibles
+        System.out.println("\n--- 2. Productos Disponibles ---");
+        inventario.stream()
+                .filter(Producto::getDisponible)
+                .forEach(p -> System.out.println("- " + p.getNombre()));
+
+        // 3. Mostrar por consola la cantidad de ítems que tiene un pedido
+        System.out.println("\n--- 3. Cantidad total de ítems en un pedido ---");
+        int cantidadTotalItems = pedido3.getDetalles().stream()
+                .mapToInt(detalle -> detalle.getCantidad())
+                .sum();
+        System.out.println("El pedido 3 contiene un total de " + cantidadTotalItems + " ítems físicos.");
+
+        // 4. Detectar productos que tengan menos de 5 como valor en stock
+        System.out.println("\n--- 4. Detectar productos con stock menor a 5 ---");
+
+        // (Agregamos un producto extra con stock bajo al inventario solo para que esta prueba muestre un resultado por pantalla)
+        Producto productoPocoStock = Producto.builder().id(11L).nombre("Sal Gruesa").precio(1500.0).stock(2).disponible(true).build();
+        inventario.add(productoPocoStock);
+
+        inventario.stream()
+                .filter(p -> p.getStock() < 5)
+                .forEach(p -> System.out.println("¡Alerta de Stock! -> " + p.getNombre() + " (Quedan: " + p.getStock() + ")"));
+
     }
 }

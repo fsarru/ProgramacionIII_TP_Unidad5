@@ -1,9 +1,9 @@
 package com.tup.programacion3.entities;
 
 import com.tup.programacion3.enums.Estado;
-import main.java.com.tup.programacion3.enums.FormaPago;
+import com.tup.programacion3.enums.FormaPago;
 import lombok.*;
-
+import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,28 +12,25 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString(exclude = "detalles")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Pedido {
-    @EqualsAndHashCode.Include
-    private Long id;
-
+@SuperBuilder
+@ToString(callSuper = true, exclude = "detalles")
+@EqualsAndHashCode(callSuper = true)
+public class Pedido extends Base implements Calculable {
     @Builder.Default
     private LocalDate fecha = LocalDate.now();
-
     @Builder.Default
     private Estado estado = Estado.PENDIENTE;
-
     @Builder.Default
     private Double total = 0.0;
-
     private FormaPago formaPago;
-
     @Builder.Default
     private Set<DetallePedido> detalles = new HashSet<>();
 
-    // Mantenemos la lógica de negocio que no puede automatizar Lombok
+    @Override
+    public void calcularTotal() {
+        this.total = detalles.stream().mapToDouble(DetallePedido::getSubtotal).sum();
+    }
+
     public void addDetallePedido(int cantidad, Producto producto) {
         DetallePedido detalle = DetallePedido.builder()
                 .cantidad(cantidad)
@@ -42,14 +39,5 @@ public class Pedido {
                 .build();
         detalles.add(detalle);
         calcularTotal();
-    }
-
-    public void deleteDetallePedidoByProducto(Producto producto) {
-        detalles.removeIf(dp -> dp.getProducto().equals(producto));
-        calcularTotal();
-    }
-
-    public void calcularTotal() {
-        this.total = detalles.stream().mapToDouble(DetallePedido::getSubtotal).sum();
     }
 }
